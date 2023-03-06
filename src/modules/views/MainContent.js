@@ -8,6 +8,11 @@ import APIService from "../helpers/APIService";
 import CircularProgress from '@mui/material/CircularProgress';
 import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import {FormHelperText} from "@mui/material";
 
 function MainContent() {
 
@@ -16,10 +21,15 @@ function MainContent() {
     const [isWaiting, setIsWaiting] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [result, setResult] = React.useState('');
+    const [tone, setTone] = React.useState('neutral');
 
     const handleChange = (event) => {
         setTextInput(event.target.value);
         setRemainingCharacters(2500 - event.target.value.length);
+    }
+
+    const handleChangeTone = (event) => {
+        setTone(event.target.value);
     }
 
     function apiCall(text) {
@@ -27,7 +37,28 @@ function MainContent() {
         try {
             APIService.getAnalysis(text)
                 .then((response) => {
-                    console.log(response[0].data);
+                    setResult(response[0].data.text.trim());
+                    setIsWaiting(false);
+                    setSuccess(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setIsWaiting(false);
+                });
+
+        } catch (error) {
+            console.log(error);
+            setIsWaiting(false);
+        }
+    }
+
+    function apiCallRephrase(text, tone) {
+        setIsWaiting(true);
+        console.log(text);
+        console.log(tone);
+        try {
+            APIService.getRephrase(text, tone)
+                .then((response) => {
                     setResult(response[0].data.text.trim());
                     setIsWaiting(false);
                     setSuccess(true);
@@ -63,8 +94,8 @@ function MainContent() {
                 value={textInput}
             />
             <Grid container justifyContent={"flex-end"} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-            <Grid item>
-                <Box sx={{position: 'relative' }}>
+                <Grid item>
+                    <Box sx={{position: 'relative'}}>
                     <Button
                         onClick={() => apiCall(textInput)}
                         disabled={isWaiting}
@@ -72,7 +103,58 @@ function MainContent() {
                         color="secondary"
                         variant="contained"
                         sx={{ mt: 2, mb: 4 }}>
-                        Analyze
+                        Analyze my Text
+                    </Button>
+                        {isWaiting && (
+                            <CircularProgress
+                                size={26}
+                                sx={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    marginTop: '-20px',
+                                    marginLeft: '-11px',
+                                }}
+                            />
+                        )}
+                    </Box>
+                </Grid>
+                <Grid item>
+                    <Box sx={{position: 'relative'}} >
+                        <FormControl variant="outlined" sx={{ mt: 2, mb: 4 }}>
+                            <InputLabel htmlFor="tone">Tone</InputLabel>
+                            <Select
+                                defaultValue={"neutral"}
+                                id="tone"
+                                value={tone}
+                                onChange={handleChangeTone}
+                                label="tone"
+                            >
+                                <MenuItem value={"neutral"}>Neutral</MenuItem>
+                                <MenuItem value={"positive"}>Positive</MenuItem>
+                                <MenuItem value={"negative"}>Negative</MenuItem>
+                                <MenuItem value={"confident"}>Confident</MenuItem>
+                                <MenuItem value={"tentative"}>Tentative</MenuItem>
+                                <MenuItem value={"analytical"}>Analytical</MenuItem>
+                                <MenuItem value={"happy"}>Happy</MenuItem>
+                                <MenuItem value={"aggressive"}>Aggressive</MenuItem>
+                                <MenuItem value={"fearful"}>Fearful</MenuItem>
+                                <MenuItem value={"sad"}>Sad</MenuItem>
+                            </Select>
+                            <FormHelperText>Choose the tone you wish your text had</FormHelperText>
+                        </FormControl>
+                    </Box>
+                </Grid>
+            <Grid item>
+                <Box sx={{position: 'relative' }}>
+                    <Button
+                        onClick={() => apiCallRephrase(textInput, tone)}
+                        disabled={isWaiting}
+                        size="large"
+                        color="secondary"
+                        variant="contained"
+                        sx={{ mt: 2, mb: 4 }}>
+                        Rephrase my Text
                     </Button>
                     {isWaiting && (
                         <CircularProgress
@@ -102,16 +184,17 @@ function MainContent() {
                     <TextField
                     id={"text"}
                     multiline
-                    label={"Sentiment Analysis"}
+                    label={"Sentiment Analysis / Rephrasing"}
                     maxRows={10}
                     margin={"normal"}
                     variant={"outlined"}
                     style={{width: "100%"}}
                     inputProps={{ readOnly: true, style: {fontSize: 18}}}
-                    helperText={"Your sentiment analysis will appear here"}
+                    helperText={"Your result will appear here"}
                     value={result}
                     disabled={isWaiting} />
                 )}
+
             </Box>
         </Box>
     </Container>

@@ -42,6 +42,11 @@ class APIService {
         return Promise.all([explanation]);
     }
 
+    getRephrase(text, tone) {
+        var rephrase = this.api.post('rephrase/eng', {message: text, tone: tone});
+        return Promise.all([rephrase]);
+    }
+
 }
 
 
