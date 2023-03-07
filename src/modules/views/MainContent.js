@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {FormHelperText} from "@mui/material";
+import SurveyDialog from "../components/SurveyDialog";
 
 function MainContent() {
 
@@ -22,6 +23,8 @@ function MainContent() {
     const [success, setSuccess] = React.useState(false);
     const [result, setResult] = React.useState('');
     const [tone, setTone] = React.useState('neutral');
+    const [textError, setTextError] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
     const handleChange = (event) => {
         setTextInput(event.target.value);
@@ -32,46 +35,68 @@ function MainContent() {
         setTone(event.target.value);
     }
 
+    const handleShowSurvey = () => {
+        setOpen(true);
+    };
+
+    const handleHideSurvey = () => {
+        setOpen(false);
+    };
+
     function apiCall(text) {
         setIsWaiting(true);
-        try {
-            APIService.getAnalysis(text)
-                .then((response) => {
-                    setResult(response[0].data.text.trim());
-                    setIsWaiting(false);
-                    setSuccess(true);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setIsWaiting(false);
-                });
-
-        } catch (error) {
-            console.log(error);
+        setTextError(false);
+        if (text.length === 0) {
+            setSuccess(false);
             setIsWaiting(false);
+            setTextError(true);
+        } else {
+            try {
+                APIService.getAnalysis(text)
+                    .then((response) => {
+                        setResult(response[0].data.text.trim());
+                        setIsWaiting(false);
+                        setSuccess(true);
+                        setTimeout(() => handleShowSurvey(), 10000);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setIsWaiting(false);
+                    });
+
+            } catch (error) {
+                console.log(error);
+                setIsWaiting(false);
+            }
         }
     }
 
     function apiCallRephrase(text, tone) {
         setIsWaiting(true);
-        console.log(text);
-        console.log(tone);
-        try {
-            APIService.getRephrase(text, tone)
-                .then((response) => {
-                    setResult(response[0].data.text.trim());
-                    setIsWaiting(false);
-                    setSuccess(true);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setIsWaiting(false);
-                });
-
-        } catch (error) {
-            console.log(error);
+        setTextError(false);
+        if (text.length === 0) {
+            setSuccess(false);
             setIsWaiting(false);
+            setTextError(true);
+            return;
         }
+            try {
+                APIService.getRephrase(text, tone)
+                    .then((response) => {
+                        setResult(response[0].data.text.trim());
+                        setIsWaiting(false);
+                        setSuccess(true);
+                        setTimeout(() => handleShowSurvey(), 15000);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        setIsWaiting(false);
+                    });
+
+            } catch (error) {
+                console.log(error);
+                setIsWaiting(false);
+            }
     }
 
   return (
@@ -80,6 +105,8 @@ function MainContent() {
           <Typography align="center" variant="h3" gutterBottom marked="center" sx={{ mb: 4 }}>
             Unlock your communication
           </Typography>
+            <Button onClick={handleShowSurvey}>Show Survey Dialog</Button>
+            <SurveyDialog open={open} onClose={handleHideSurvey} />
             <TextField
                 label={"Enter or copy your text here"}
                 id={"text"}
@@ -88,11 +115,16 @@ function MainContent() {
                 margin={"normal"}
                 variant={"outlined"}
                 style={{width: "100%"}}
-                inputProps={{ maxLength: 2500, style: {fontSize: 18}}}
+                inputProps={{maxLength: 2500, style: {fontSize: 18}}}
                 helperText={"Remaining characters: " + remainingCharacters}
                 onChange={handleChange}
                 value={textInput}
+                error={textError}
             />
+            {textError && (
+                <FormHelperText error={true}>Please enter some text</FormHelperText>
+            )}
+
             <Grid container justifyContent={"flex-end"} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 <Grid item>
                     <Box sx={{position: 'relative'}}>
@@ -134,12 +166,12 @@ function MainContent() {
                                 <MenuItem value={"positive"}>Positive</MenuItem>
                                 <MenuItem value={"negative"}>Negative</MenuItem>
                                 <MenuItem value={"confident"}>Confident</MenuItem>
-                                <MenuItem value={"tentative"}>Tentative</MenuItem>
                                 <MenuItem value={"analytical"}>Analytical</MenuItem>
                                 <MenuItem value={"happy"}>Happy</MenuItem>
                                 <MenuItem value={"aggressive"}>Aggressive</MenuItem>
                                 <MenuItem value={"fearful"}>Fearful</MenuItem>
                                 <MenuItem value={"sad"}>Sad</MenuItem>
+                                <MenuItem value={"scientific"}>Scientific</MenuItem>
                             </Select>
                             <FormHelperText>Choose the tone you wish your text had</FormHelperText>
                         </FormControl>
@@ -194,7 +226,6 @@ function MainContent() {
                     value={result}
                     disabled={isWaiting} />
                 )}
-
             </Box>
         </Box>
     </Container>

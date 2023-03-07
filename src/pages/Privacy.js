@@ -9,14 +9,6 @@ import privacy from '../modules/views/privacy.md';
 import ReactMarkdown from 'react-markdown';
 import {useEffect, useState} from "react";
 
-
-
-fetch(privacy)
-    .then((response) => response.text())
-    .then((text) => {
-        console.log(text);
-    });
-
 function Privacy() {
     const [postMarkdown, setPostMarkdown] = useState('');
     useEffect(() => {

@@ -9,14 +9,6 @@ import FAQ from '../modules/views/faq.md';
 import ReactMarkdown from 'react-markdown';
 import {useEffect, useState} from "react";
 
-
-
-fetch(FAQ)
-    .then((response) => response.text())
-    .then((text) => {
-        console.log(text);
-    });
-
 function Privacy() {
     const [postMarkdown, setPostMarkdown] = useState('');
     useEffect(() => {

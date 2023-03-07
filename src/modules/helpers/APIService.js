@@ -47,7 +47,12 @@ class APIService {
         return Promise.all([rephrase]);
     }
 
-}
+    submitSurvey(ratings) {
+        console.log(ratings);
+        var survey = this.api.post('survey/submit', ratings);
+        return Promise.all([survey]);
+    }
 
+}
 
 export default new APIService();
