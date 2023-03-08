@@ -2,9 +2,9 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import Typography from '../components/Typography';
+import Typography from '../modules/components/Typography';
 import Button from "@mui/material/Button";
-import APIService from "../helpers/APIService";
+import APIService from "../modules/helpers/APIService";
 import CircularProgress from '@mui/material/CircularProgress';
 import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
@@ -13,7 +13,9 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import {FormHelperText} from "@mui/material";
-import SurveyDialog from "../components/SurveyDialog";
+import SurveyDialog from "../modules/components/SurveyDialog";
+import AppAppBar from "../modules/views/AppAppBar";
+import AppFooter from "../modules/views/AppFooter";
 
 function MainContent() {
 
@@ -100,7 +102,9 @@ function MainContent() {
     }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}  component="main">
+      <React.Fragment>
+          <AppAppBar />
+        <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}  component="main">
         <Box sx={{ mt: 7, mb: 12 }}>
           <Typography align="center" variant="h3" gutterBottom marked="center" sx={{ mb: 4 }}>
             Unlock your communication
@@ -228,7 +232,9 @@ function MainContent() {
                 )}
             </Box>
         </Box>
-    </Container>
+        </Container>
+          <AppFooter />
+      </React.Fragment>
   );
 }
 
