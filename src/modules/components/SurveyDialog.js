@@ -31,13 +31,17 @@ export default function SurveyDialog(props) {
         return { survey };
     }
 
-    const handleSubmit = () => {
-        try {
-            const surveyJSON = convertRatingsToJSON(ratings);
-            APIService.submitSurvey(surveyJSON);
-        } catch (error) {
-            console.log(error);
-        }
+    const handleSubmit = async () => {
+        const surveyJSON = convertRatingsToJSON(ratings);
+        APIService.submitSurvey(surveyJSON)
+            .then((response) => {
+                    console.log("Survey Submitted!");
+                    alert("Thank you for your feedback!");
+                    onClose();
+                })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     return (
