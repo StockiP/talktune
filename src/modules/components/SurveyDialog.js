@@ -106,7 +106,7 @@ export default function SurveyDialog(props) {
                         <Typography variant="h6">
                             Further Feedback:
                         </Typography>
-                        <TextField label="RQ13" value={ratings[12]} onChange={(event) => handleRatingChange(12, event.target.value)} />
+                        <TextField multiline maxRows={10} label="RQ13" value={ratings[12]} onChange={(event) => handleRatingChange(12, event.target.value)} />
                     </Stack>
                 </DialogContent>
                 <DialogActions>

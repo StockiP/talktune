@@ -222,7 +222,7 @@ function MainContent() {
                     id={"text"}
                     multiline
                     label={"Sentiment Analysis / Rephrasing"}
-                    maxRows={10}
+                    maxRows={20}
                     margin={"normal"}
                     variant={"outlined"}
                     style={{width: "100%"}}
