@@ -1,0 +1,5 @@
+@keyframes blink {
+    50% {
+        background-color: #1F99F0; /* change to desired highlight color */
+    }
+}

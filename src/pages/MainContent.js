@@ -27,6 +27,7 @@ function MainContent() {
     const [tone, setTone] = React.useState('neutral');
     const [textError, setTextError] = React.useState(false);
     const [open, setOpen] = React.useState(false);
+    const [isHover, setHover] = React.useState(false);
 
     const handleChange = (event) => {
         setTextInput(event.target.value);
@@ -58,8 +59,9 @@ function MainContent() {
                     .then((response) => {
                         setResult(response[0].data.text.trim());
                         setIsWaiting(false);
+                        setHover(false)
                         setSuccess(true);
-                        setTimeout(() => handleShowSurvey(), 10000);
+                        //setTimeout(() => handleShowSurvey(), 10000);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -79,6 +81,7 @@ function MainContent() {
         if (text.length === 0) {
             setSuccess(false);
             setIsWaiting(false);
+            setHover(false)
             setTextError(true);
             return;
         }
@@ -109,7 +112,6 @@ function MainContent() {
           <Typography align="center" variant="h3" gutterBottom marked="center" sx={{ mb: 4 }}>
             Unlock your communication
           </Typography>
-            <Button onClick={handleShowSurvey}>Show Survey Dialog</Button>
             <SurveyDialog open={open} onClose={handleHideSurvey} />
             <TextField
                 label={"Enter or copy your text here"}
@@ -172,7 +174,6 @@ function MainContent() {
                                 <MenuItem value={"confident"}>Confident</MenuItem>
                                 <MenuItem value={"analytical"}>Analytical</MenuItem>
                                 <MenuItem value={"happy"}>Happy</MenuItem>
-                                <MenuItem value={"aggressive"}>Aggressive</MenuItem>
                                 <MenuItem value={"fearful"}>Fearful</MenuItem>
                                 <MenuItem value={"sad"}>Sad</MenuItem>
                                 <MenuItem value={"scientific"}>Scientific</MenuItem>
@@ -231,6 +232,22 @@ function MainContent() {
                     disabled={isWaiting} />
                 )}
             </Box>
+            {success && (
+            <Button
+                fullWidth
+                size={"large"}
+                disabled={isWaiting}
+                onClick={handleShowSurvey}
+                variant={success ? "contained" : "outlined"}
+                style={success && !isWaiting && !isHover ? {
+                    animation: "blink 1s linear infinite"
+                } : {}}
+                sx={{ mt: 2, mb: 4 }}
+                onMouseEnter={() => setHover(true)}
+            >
+                Participate in the survey
+            </Button>
+            )}
         </Box>
         </Container>
           <AppFooter />

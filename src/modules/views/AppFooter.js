@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
 import Typography from '../components/Typography';
-import TextField from '../components/TextField';
 import Icon from '@mui/material/Icon';
 import GithubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -31,17 +30,6 @@ const iconStyle = {
     color: 'inherit',
   }
 };
-
-const LANGUAGES = [
-  {
-    code: 'en-US',
-    name: 'English',
-  },
-  {
-    code: 'de-DE',
-    name: 'Deutsch',
-  },
-];
 
 export default function AppFooter() {
   return (
@@ -73,24 +61,6 @@ export default function AppFooter() {
             </Grid>
           </Grid>
           <Grid item xs={6} sm={8} md={4}>
-            <Typography variant="h6" marked="left" gutterBottom sx={{color: 'white.main'}}>
-              Language
-            </Typography>
-            <TextField
-              select
-              size="small"
-              variant="standard"
-              SelectProps={{
-                native: true,
-              }}
-              sx={{ mt: 1, width: 150, }}
-            >
-              {LANGUAGES.map((language) => (
-                <option value={language.code} key={language.code}>
-                  {language.name}
-                </option>
-              ))}
-            </TextField>
           </Grid>
           <Grid item>
           </Grid>
