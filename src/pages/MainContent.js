@@ -19,7 +19,7 @@ import AppFooter from "../modules/views/AppFooter";
 
 function MainContent() {
 
-    const [remainingCharacters, setRemainingCharacters] = React.useState(2500);
+    const [remainingCharacters, setRemainingCharacters] = React.useState(2000);
     const [textInput, setTextInput] = React.useState('');
     const [isWaiting, setIsWaiting] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
@@ -121,7 +121,7 @@ function MainContent() {
                 margin={"normal"}
                 variant={"outlined"}
                 style={{width: "100%"}}
-                inputProps={{maxLength: 2500, style: {fontSize: 18}}}
+                inputProps={{maxLength: 2000, style: {fontSize: 18}}}
                 helperText={"Remaining characters: " + remainingCharacters}
                 onChange={handleChange}
                 value={textInput}
