@@ -31,7 +31,7 @@ function MainContent() {
 
     const handleChange = (event) => {
         setTextInput(event.target.value);
-        setRemainingCharacters(2500 - event.target.value.length);
+        setRemainingCharacters(2000 - event.target.value.length);
     }
 
     const handleChangeTone = (event) => {
