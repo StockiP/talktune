@@ -33,6 +33,7 @@ export default function SurveyDialog(props) {
 
     const handleSubmit = async () => {
         const surveyJSON = convertRatingsToJSON(ratings);
+        console.log(surveyJSON);
         APIService.submitSurvey(surveyJSON)
             .then((response) => {
                     console.log("Survey Submitted!");
